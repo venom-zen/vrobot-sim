@@ -1,0 +1,18 @@
+# 虚拟环境
+.venv/
+venv/
+
+# Python 缓存与构建产物
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# 测试缓存
+.pytest_cache/
+
+# 编辑器
+.idea/
+.vscode/
+*.swp
