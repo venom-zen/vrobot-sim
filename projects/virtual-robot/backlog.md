@@ -53,7 +53,7 @@ candidate -> ready-for-clarifying -> design-ready -> planned -> executing -> don
 - **Spec**: `specs/sim-kinematics/design.md`
 - **Status evidence**: 交付链路完成：design review R6 为 `Go`（F-023 已修复）、`tasks.md` 30 项 checkbox 全部完成、
   `exec-evidence.md` 记录 126 项测试通过、`code-review.md` 为 `Pass / Go`（8 条 findings 全部 resolved）。
-- **External ref**: None
+- **External ref**: https://github.com/venom-zen/vrobot-sim/issues/1
 
 #### Open Questions
 
@@ -83,7 +83,7 @@ candidate -> ready-for-clarifying -> design-ready -> planned -> executing -> don
 - **Spec**: Not created
 - **Status evidence**: 通过 STEP 6 准入关卡：依赖项已交付（code review `Pass / Go`），Outcome、Priority、
   Success signal 与边界均已确认，无阻塞澄清的项目级未决决策。
-- **External ref**: None
+- **External ref**: https://github.com/venom-zen/vrobot-sim/issues/2
 
 #### Open Questions
 
@@ -108,7 +108,7 @@ candidate -> ready-for-clarifying -> design-ready -> planned -> executing -> don
 - **Readiness**: Outcome 与边界已确认。等待前两项确定状态集合与数据契约后进入澄清。
 - **Spec**: Not created
 - **Status evidence**: None
-- **External ref**: None
+- **External ref**: https://github.com/venom-zen/vrobot-sim/issues/3
 
 #### Open Questions
 
@@ -132,7 +132,7 @@ candidate -> ready-for-clarifying -> design-ready -> planned -> executing -> don
 - **Readiness**: Outcome 与边界已确认。等待 MVP 验证通过，且需要先确认现有调度系统的地图格式是否需要兼容。
 - **Spec**: Not created
 - **Status evidence**: None
-- **External ref**: None
+- **External ref**: https://github.com/venom-zen/vrobot-sim/issues/4
 
 #### Open Questions
 
@@ -155,7 +155,7 @@ candidate -> ready-for-clarifying -> design-ready -> planned -> executing -> don
 - **Readiness**: Outcome 与边界已确认。等待 MVP 验证通过，且需要现有调度系统的指令接口样例。
 - **Spec**: Not created
 - **Status evidence**: None
-- **External ref**: None
+- **External ref**: https://github.com/venom-zen/vrobot-sim/issues/5
 
 #### Open Questions
 
@@ -179,7 +179,7 @@ candidate -> ready-for-clarifying -> design-ready -> planned -> executing -> don
   该结果决定并发架构方向。
 - **Spec**: Not created
 - **Status evidence**: None
-- **External ref**: None
+- **External ref**: https://github.com/venom-zen/vrobot-sim/issues/6
 
 #### Open Questions
 
@@ -203,7 +203,7 @@ candidate -> ready-for-clarifying -> design-ready -> planned -> executing -> don
   若死锁场景难以通过实时动画定位，可提前启动。
 - **Spec**: Not created
 - **Status evidence**: None
-- **External ref**: None
+- **External ref**: https://github.com/venom-zen/vrobot-sim/issues/7
 
 #### Open Questions
 
@@ -226,7 +226,7 @@ candidate -> ready-for-clarifying -> design-ready -> planned -> executing -> don
 - **Readiness**: 用户已确认第一版不做通信层（见 PDR-comm-layer-deferred）。保留方向，暂不澄清技术细节。
 - **Spec**: Not created
 - **Status evidence**: None
-- **External ref**: None
+- **External ref**: https://github.com/venom-zen/vrobot-sim/issues/8
 
 #### Open Questions
 
@@ -247,7 +247,7 @@ candidate -> ready-for-clarifying -> design-ready -> planned -> executing -> don
 - **Readiness**: 保留方向，暂不澄清技术细节。
 - **Spec**: Not created
 - **Status evidence**: None
-- **External ref**: None
+- **External ref**: https://github.com/venom-zen/vrobot-sim/issues/9
 
 #### Open Questions
 
@@ -268,7 +268,7 @@ candidate -> ready-for-clarifying -> design-ready -> planned -> executing -> don
 - **Readiness**: 用户已确认异常态与故障注入不进入 MVP。保留方向，暂不澄清技术细节。
 - **Spec**: Not created
 - **Status evidence**: None
-- **External ref**: None
+- **External ref**: https://github.com/venom-zen/vrobot-sim/issues/10
 
 #### Open Questions
 
