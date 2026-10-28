@@ -12,17 +12,17 @@ candidate -> ready-for-clarifying -> design-ready -> planned -> executing -> don
 
 ## Current Focus
 
-- `WI-sim-kinematics` — 三个 Now 项里唯一的无依赖根节点，另外两项都消费它的位姿输出与状态机边界。
-  下一步由项目发起人对它运行 `clarifying`，确定差速底盘模型、状态机与拓扑地图数据模型的设计。
-- `WI-mutex-scheduling` 与 `WI-live-visualization` 保持 `candidate`，等 `WI-sim-kinematics` 的地图数据模型
-  和状态机边界确定后再进入 `clarifying`，避免三者重复决策同一份数据契约。
+- `WI-mutex-scheduling` — `WI-sim-kinematics` 已交付，地图数据模型与机器人状态集合已确定；
+  下一步由项目发起人对它运行 `clarifying`，确定路权申请、占用与释放的流转规则。
+- `WI-live-visualization` 保持 `candidate`，等 `WI-mutex-scheduling` 确定临界区占用与等待路权状态后再进入
+  `clarifying`，避免重复决策状态集合。
 
 ## Work Items
 
 | ID | Outcome | Priority | Status | Dependencies |
 |----|---------|----------|--------|--------------|
-| `WI-sim-kinematics` | 工程师能让单台虚拟 AMR 按运动学约束在拓扑图上行驶并正确响应碰撞 | Now | ready-for-clarifying | None |
-| `WI-mutex-scheduling` | 工程师能构造并观察多车临界区互斥与死锁场景 | Now | candidate | `WI-sim-kinematics` |
+| `WI-sim-kinematics` | 工程师能让单台虚拟 AMR 按运动学约束在拓扑图上行驶并正确响应碰撞 | Now | done | None |
+| `WI-mutex-scheduling` | 工程师能构造并观察多车临界区互斥与死锁场景 | Now | ready-for-clarifying | `WI-sim-kinematics` |
 | `WI-live-visualization` | 工程师能在浏览器里实时看到机器人位姿、状态与临界区占用 | Now | candidate | `WI-sim-kinematics`, `WI-mutex-scheduling` |
 | `WI-map-editor` | 工程师能在浏览器里编辑地图而不改代码 | Next | candidate | `WI-sim-kinematics` |
 | `WI-pluggable-dispatcher` | 工程师能用外部调度器替换内置调度跑同一场景 | Next | candidate | `WI-sim-kinematics`, `WI-mutex-scheduling` |
@@ -45,14 +45,14 @@ candidate -> ready-for-clarifying -> design-ready -> planned -> executing -> don
 - **Success signal**: 单台机器人在内置示例地图上完成一次从起点到目标点的行驶，位姿轨迹符合差速运动学，
   速度、加速度、转向角速度均不超过配置上限；驶向障碍物时进入急停状态。证据来源为仿真状态输出与数值自检。
 - **Priority**: Now
-- **Status**: ready-for-clarifying
+- **Status**: done
 - **Dependencies**: None
 - **Readiness**: 用户与 Outcome 明确；MVP 边界、Priority 和依赖已确认；不含阻塞单项设计的项目级未决决策；
   Success signal 足以指导后续澄清。地图数据模型需在本次澄清中完整覆盖全部边属性，
   以免 `WI-map-editor`、`WI-pluggable-dispatcher` 与 `WI-scale-50-robots` 返工（见 project.md 风险表）。
-- **Spec**: Not created
-- **Status evidence**: 通过 STEP 6 准入关卡：用户为调度算法工程师自用，Outcome 为单车运动仿真可跑通，
-  Priority 为 Now，Dependencies 为 None，Success signal 已定义。
+- **Spec**: `specs/sim-kinematics/design.md`
+- **Status evidence**: 交付链路完成：design review R6 为 `Go`（F-023 已修复）、`tasks.md` 30 项 checkbox 全部完成、
+  `exec-evidence.md` 记录 126 项测试通过、`code-review.md` 为 `Pass / Go`（8 条 findings 全部 resolved）。
 - **External ref**: None
 
 #### Open Questions
@@ -76,12 +76,13 @@ candidate -> ready-for-clarifying -> design-ready -> planned -> executing -> don
   其余处于等待路权状态，没有机器人重叠穿行；示例地图上能构造出一个多车互相等待无法推进的死锁场景。
   证据来源为仿真状态输出。
 - **Priority**: Now
-- **Status**: candidate
+- **Status**: ready-for-clarifying
 - **Dependencies**: `WI-sim-kinematics`（消费其位姿输出、状态机与地图互斥组属性）
-- **Readiness**: Outcome 与边界已确认。等待 `WI-sim-kinematics` 确定地图数据模型与状态机边界后进入澄清，
-  避免两项重复决策同一份数据契约。
+- **Readiness**: 依赖已满足：`WI-sim-kinematics` 已交付，地图数据模型（含 `MapCriticalZone` 与互斥组属性）
+  与机器人状态枚举已确定。等待项目发起人运行 `clarifying`。
 - **Spec**: Not created
-- **Status evidence**: None
+- **Status evidence**: 通过 STEP 6 准入关卡：依赖项已交付（code review `Pass / Go`），Outcome、Priority、
+  Success signal 与边界均已确认，无阻塞澄清的项目级未决决策。
 - **External ref**: None
 
 #### Open Questions
