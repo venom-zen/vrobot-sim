@@ -97,12 +97,15 @@ class MapBuildError(ValueError):
 
 @dataclass(frozen=True)
 class TopologyMap:
+    """Immutable map data plus the read-only indexes derived in one build call."""
+
     map_id: str
     nodes: tuple[MapNode, ...]
     edges: tuple[MapEdge, ...]
     zones: tuple[MapCriticalZone, ...]
     edge_length_m: Mapping[str, float]
     edge_by_node_pair: Mapping[tuple[str, str], MapEdge]
+    edge_zones: Mapping[str, tuple[str, ...]]
 
     def node(self, node_id: str) -> MapNode:
         for node in self.nodes:
@@ -271,4 +274,14 @@ def build_topology_map(
         zones=tuple(zones),
         edge_length_m=MappingProxyType(length_by_edge),
         edge_by_node_pair=MappingProxyType(pair_index),
+        edge_zones=MappingProxyType(_edge_zones_by_id(zones)),
     )
+
+
+def _edge_zones_by_id(zones: Sequence[MapCriticalZone]) -> dict[str, tuple[str, ...]]:
+    """Invert the zone member-edge lists so the relation keeps a single source."""
+    owners_by_edge: dict[str, list[str]] = {}
+    for zone in zones:
+        for edge_id in zone.edge_ids:
+            owners_by_edge.setdefault(edge_id, []).append(zone.zone_id)
+    return {edge_id: tuple(sorted(zone_ids)) for edge_id, zone_ids in owners_by_edge.items()}

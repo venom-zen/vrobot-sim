@@ -14,7 +14,11 @@ if TYPE_CHECKING:
 
 
 class SafetyMonitor:
-    """One tick of hazard judgement, made along the current segment centerline only."""
+    """One tick of hazard judgement, made along the current segment centerline only.
+
+    ``peers`` are the other robots' tick-start circles. They take the same two-step
+    judgement as registered obstacles; the caller leaves this robot out of the set.
+    """
 
     def check(
         self,
@@ -23,12 +27,14 @@ class SafetyMonitor:
         segment: SegmentGeometry,
         dt: float,
         reference_v_mps: float | None = None,
+        peers: Sequence[Obstacle] = (),
     ) -> EStopReason:
         chassis = robot.spec.chassis
         x, y = robot.pose.x, robot.pose.y
+        circles = (*obstacles, *peers)
 
         # Tangent circles are not an overlap, hence the strict comparisons throughout.
-        for obstacle in obstacles:
+        for obstacle in circles:
             if math.hypot(obstacle.center_x - x, obstacle.center_y - y) < obstacle.radius_m + chassis.body_radius_m:
                 return EStopReason.OVERLAP
 
@@ -41,7 +47,7 @@ class SafetyMonitor:
         # is that segment's problem, and this is what keeps an e-stop inside the segment.
         window_end_m = min(segment.length_m, start_m + lookahead_m)
 
-        for obstacle in obstacles:
+        for obstacle in circles:
             reach_m = obstacle.radius_m + chassis.body_radius_m
             if abs(segment.perpendicular_offset(obstacle.center_x, obstacle.center_y)) > reach_m:
                 continue

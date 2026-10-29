@@ -93,6 +93,30 @@ def test_critical_zone_members_all_resolve_in_the_same_map():
             assert zone.capacity >= 1
 
 
+@pytest.mark.parametrize("map_id", [MINIMAL_MAP_ID, DEMO_MAP_ID])
+def test_edge_zones_inverts_the_zone_member_lists(map_id):
+    map_obj = load_map(map_id)
+    expected: dict[str, list[str]] = {}
+    for zone in map_obj.zones:
+        for edge_id in zone.edge_ids:
+            expected.setdefault(edge_id, []).append(zone.zone_id)
+    assert {edge_id: list(owners) for edge_id, owners in map_obj.edge_zones.items()} == {
+        edge_id: sorted(owners) for edge_id, owners in expected.items()
+    }
+
+
+def test_demo_map_has_ten_startable_nodes_more_than_a_body_diameter_apart():
+    map_obj = load_map(DEMO_MAP_ID)
+    startable = {edge.from_node_id for edge in map_obj.edges} | {edge.to_node_id for edge in map_obj.edges}
+    assert len(startable) >= 10
+
+    nodes = [map_obj.node(node_id) for node_id in sorted(startable)]
+    for index, first in enumerate(nodes):
+        for second in nodes[index + 1:]:
+            distance = math.hypot(second.x - first.x, second.y - first.y)
+            assert distance > 0.70, f"start nodes {first.node_id} and {second.node_id} are {distance} m apart"
+
+
 def test_minimal_map_has_no_zones_and_two_bidirectional_edges():
     map_obj = load_map(MINIMAL_MAP_ID)
     assert map_obj.zones == ()
@@ -246,6 +270,9 @@ def test_derived_indexes_are_read_only():
         map_obj.edge_length_m["E01"] = 1.0
     with pytest.raises(TypeError):
         map_obj.edge_by_node_pair[("N01", "N02")] = map_obj.edges[0]
+    demo_map = load_map(DEMO_MAP_ID)
+    with pytest.raises(TypeError):
+        demo_map.edge_zones["E01"] = ()
 
 
 def test_all_violations_are_reported_together():

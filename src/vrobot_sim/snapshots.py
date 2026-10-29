@@ -39,9 +39,28 @@ class RobotSnapshot:
 
 
 @dataclass(frozen=True)
+class ZoneSnapshot:
+    """One critical zone's occupancy and queue at the end of a tick.
+
+    Holders are ordered by robot_id, waiters by (arrival_tick, robot_id). A multi-zone
+    request appears once in every zone it applies to.
+    """
+
+    zone_id: str
+    capacity: int
+    holder_robot_ids: tuple[str, ...]
+    waiting_robot_ids: tuple[str, ...]
+
+
+@dataclass(frozen=True)
 class TickSnapshot:
-    """A consistent time slice over every robot, ordered by robot_id."""
+    """A consistent time slice over every robot, ordered by robot_id.
+
+    ``zones`` is empty unless a dispatcher is attached; zone data comes from whoever
+    implements IF-PROTO-zone-state-read.
+    """
 
     tick_index: int
     sim_time_s: float
     robots: tuple[RobotSnapshot, ...]
+    zones: tuple[ZoneSnapshot, ...] = ()
