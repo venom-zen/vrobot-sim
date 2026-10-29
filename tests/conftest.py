@@ -57,6 +57,7 @@ def make_robot(
     spec: RobotSpec | None = None,
     dt: float = DT_S,
     obstacles: ObstacleField | None = None,
+    arbiter=None,
 ) -> Robot:
     return Robot(
         spec or make_spec(),
@@ -64,6 +65,7 @@ def make_robot(
         dt,
         SafetyMonitor(),
         obstacles if obstacles is not None else ObstacleField(),
+        arbiter,
     )
 
 

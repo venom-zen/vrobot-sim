@@ -23,6 +23,7 @@ from vrobot_sim.maps import load_map
 from vrobot_sim.maps.demo import DEMO_MAP_ID
 from vrobot_sim.maps.minimal import MINIMAL_MAP_ID
 from vrobot_sim.obstacle_field import ObstacleField
+from vrobot_sim.rights import GrantOutcome
 from vrobot_sim.robot import (
     CommandKind,
     CommandRejection,
@@ -400,3 +401,116 @@ def test_resume_carrying_a_node_path_is_rejected_without_changing_state():
     assert field.deregister("OBS").accepted
     assert robot.receive(_resume("R1")).accepted
     assert robot.status is RobotStatus.MOVING
+
+
+def test_a_turn_that_lands_exactly_on_the_heading_keeps_the_next_segment_length():
+    """A deadbeat turn step can hit the heading exactly; the segment length must survive it."""
+    heading = math.atan2(-15.0, -10.0)
+    spec = make_spec(robot_id="R9", path=("N03", "N01", "N02"), start_node_id="N03", start_theta_rad=heading)
+    robot = make_robot(load_map(DEMO_MAP_ID), spec=spec)
+    robot.receive(_assign("R9", ("N03", "N01", "N02")))
+
+    for _ in range(2000):
+        robot.tick()
+        if robot.segment_index == 1 and robot.turn_remaining_rad == 0.0:
+            break
+    assert robot.segment_index == 1
+    assert (robot.pose.x, robot.pose.y) == (0.0, 0.0), "the turn happens in place at N01"
+    assert robot.segment_remaining_m == 20.0, "the next segment length is restored on alignment"
+
+
+class _StubArbiter:
+    """Scriptable stand-in for IF-PROTO-right-of-way-arbitration."""
+
+    def __init__(self) -> None:
+        self.outcome = GrantOutcome.QUEUED
+        self.requests: list[tuple[str, int, tuple[str, ...], int]] = []
+        self.releases: list[tuple[str, tuple[str, ...]]] = []
+
+    def request_right(self, robot_id, segment_index, zone_ids, tick_index):
+        self.requests.append((robot_id, segment_index, zone_ids, tick_index))
+        return self.outcome
+
+    def release_right(self, robot_id, zone_ids):
+        self.releases.append((robot_id, zone_ids))
+
+
+def _demo_robot(path, arbiter, obstacles=None):
+    spec = make_spec(path=path, start_node_id=path[0])
+    return make_robot(load_map(DEMO_MAP_ID), spec=spec, obstacles=obstacles, arbiter=arbiter)
+
+
+def test_a_first_segment_application_queues_at_the_start_node_until_granted():
+    arbiter = _StubArbiter()
+    robot = _demo_robot(("N01", "N02"), arbiter)
+    result = robot.receive(_assign("R1", ("N01", "N02")))
+    assert result.accepted
+    assert robot.status is RobotStatus.WAITING_RIGHT
+    assert robot.holding_zone_ids == ()
+    assert arbiter.requests == []
+
+    robot.tick(0)
+    assert arbiter.requests == [("R1", 0, ("Z01",), 0)]
+    assert robot.status is RobotStatus.WAITING_RIGHT
+    assert (robot.pose.x, robot.pose.y) == (0.0, 0.0)
+    assert robot.v_mps == 0.0 and robot.omega_radps == 0.0
+
+    arbiter.outcome = GrantOutcome.GRANTED
+    robot.tick(1)
+    assert arbiter.requests[-1] == ("R1", 0, ("Z01",), 1), "the queued request is repeated"
+    assert robot.status is RobotStatus.HOLDING_ZONE
+    assert robot.holding_zone_ids == ("Z01",)
+    assert robot.segment_index == 0
+
+
+def test_a_waiting_robot_keeps_its_zone_until_the_switch_tick():
+    arbiter = _StubArbiter()
+    robot = _demo_robot(("N01", "N02", "N03"), arbiter)
+    robot.receive(_assign("R1", ("N01", "N02", "N03")))
+    arbiter.outcome = GrantOutcome.GRANTED
+    robot.tick(0)
+    assert robot.holding_zone_ids == ("Z01",)
+
+    arbiter.outcome = GrantOutcome.QUEUED
+    assert _cruise_until(robot, lambda item: item.status is RobotStatus.WAITING_RIGHT)
+    assert (robot.pose.x, robot.pose.y) == (20.0, 0.0)
+    assert robot.current_node_id == "N02"
+    assert robot.holding_zone_ids == ("Z01",), "the previous zone is held while waiting"
+    assert arbiter.requests[-1][:3] == ("R1", 1, ("Z02",))
+
+    arbiter.outcome = GrantOutcome.GRANTED
+    robot.tick(2000)
+    assert robot.holding_zone_ids == ("Z02",)
+    assert robot.segment_index == 1
+    assert robot.status is RobotStatus.HOLDING_ZONE
+    assert ("R1", ("Z01",)) in arbiter.releases, "release happens only on the switch"
+
+
+def test_an_e_stop_while_holding_keeps_the_zone_and_reports_e_stop():
+    arbiter = _StubArbiter()
+    field = make_obstacle_field([obstacle_at(10.0, 0.0)])
+    robot = _demo_robot(("N01", "N02"), arbiter, obstacles=field)
+    robot.receive(_assign("R1", ("N01", "N02")))
+    arbiter.outcome = GrantOutcome.GRANTED
+
+    assert _cruise_until(robot, lambda item: item.status is RobotStatus.E_STOP)
+    assert robot.estop_reason is EStopReason.SAFETY_DISTANCE
+    assert robot.holding_zone_ids == ("Z01",)
+    assert arbiter.releases == []
+
+
+def test_a_resumed_robot_returns_to_holding_zone_and_releases_on_arrival():
+    arbiter = _StubArbiter()
+    field = make_obstacle_field([obstacle_at(10.0, 0.0)])
+    robot = _demo_robot(("N01", "N02"), arbiter, obstacles=field)
+    robot.receive(_assign("R1", ("N01", "N02")))
+    arbiter.outcome = GrantOutcome.GRANTED
+    assert _cruise_until(robot, lambda item: item.status is RobotStatus.E_STOP)
+
+    assert field.deregister("OBS").accepted
+    assert robot.receive(_resume("R1")).accepted
+    assert robot.status is RobotStatus.HOLDING_ZONE
+
+    assert _cruise_until(robot, lambda item: item.status is RobotStatus.ARRIVED, max_ticks=3000)
+    assert robot.holding_zone_ids == ()
+    assert ("R1", ("Z01",)) in arbiter.releases

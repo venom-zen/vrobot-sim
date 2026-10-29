@@ -1,8 +1,10 @@
 """Optional benchmark: single-step cost of the demo scenario at ten robots.
 
-The assertions here only prove the measurement exists. Speed numbers are recorded in
-specs/sim-kinematics/benchmark-notes.md and never gate a build, because host load makes a
-threshold assertion flaky.
+Every robot starts on its own node, so each step runs the full peer judging path. The
+assertions here only prove the measurement exists; speed numbers never gate a build, because
+host load makes a threshold assertion flaky. Current numbers are recorded in
+specs/mutex-scheduling/exec-evidence.md; specs/sim-kinematics/benchmark-notes.md holds the
+earlier run of this measurement before peer judging was enabled.
 """
 
 from __future__ import annotations
@@ -16,17 +18,19 @@ from vrobot_sim.scenario import Scenario
 from vrobot_sim.simulation import Simulation
 
 STEP_COUNT = 1000
+# Ten distinct start nodes, pairwise more than 0.70 m apart, so every step judges peers
+# without an initial overlap e-stop.
 ROBOT_PATHS = (
-    ("N01", "N02", "N03", "N01"),
-    ("N01", "N02", "N04", "N05"),
-    ("N02", "N03", "N01", "N02"),
-    ("N03", "N01", "N02", "N03"),
-    ("N04", "N05", "N06", "N07"),
-    ("N01", "N02", "N03"),
-    ("N02", "N04", "N05", "N06"),
-    ("N05", "N06", "N07"),
-    ("N03", "N01", "N02", "N04"),
-    ("N06", "N07"),
+    ("N01", "N08"),
+    ("N02", "N03"),
+    ("N03", "N01"),
+    ("N04", "N02"),
+    ("N05", "N04"),
+    ("N06", "N05"),
+    ("N07", "N06"),
+    ("N08", "N10"),
+    ("N09", "N07"),
+    ("N10", "N09"),
 )
 FIXED_OBSTACLES = (obstacle_at(10.0, 8.0, 0.3, "B1"), obstacle_at(18.0, 6.0, 0.25, "B2"), obstacle_at(5.0, 3.0, 0.2, "B3"))
 

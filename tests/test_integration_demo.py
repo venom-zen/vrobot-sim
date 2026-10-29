@@ -14,7 +14,7 @@ from vrobot_sim.simulation import Simulation
 
 LEGAL_PATHS = (
     ("N01", "N02", "N03", "N01"),
-    ("N01", "N02", "N04", "N05", "N06", "N07"),
+    ("N04", "N05", "N06", "N07"),
     ("N02", "N03", "N01"),
 )
 
@@ -35,7 +35,8 @@ def _demo_scenario() -> Scenario:
 def test_the_demo_map_passes_build_and_creation_validation():
     map_obj = load_map(DEMO_MAP_ID)
     assert map_obj.map_id == DEMO_MAP_ID
-    assert len(map_obj.edges) == 7
+    assert len(map_obj.nodes) == 10
+    assert len(map_obj.edges) == 11
     assert len(map_obj.zones) == 5
 
     sim = Simulation.create(_demo_scenario())
