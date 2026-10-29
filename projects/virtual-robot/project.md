@@ -17,6 +17,19 @@
   三个 Now work item 完整覆盖 MVP，`WI-sim-kinematics` 已通过准入关卡。
   剩余未决问题只影响 Next 与 Later，不改变项目目标、MVP 边界或当前焦点。
 
+## External Tracking
+
+- **Enabled**: yes。
+- **Host**: github.com。
+- **Owner**: venom-zen。
+- **Repo**: venom-zen/vrobot-sim。
+- **Project title**: VirtualRobot。
+- **Project number**: 2。
+- **Project visibility**: private。
+- **Mirror mode**: safe-subset。
+
+仓库公开，只同步 safe-subset 字段；Readiness、Status evidence 和 Open Questions 留在本地 backlog。
+
 ## Target Users and Outcomes
 
 | User / Role | Current problem | Desired outcome |
