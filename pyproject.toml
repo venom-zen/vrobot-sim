@@ -10,10 +10,14 @@ requires-python = ">=3.11"
 dependencies = []
 
 [project.optional-dependencies]
-dev = ["pytest"]
+dev = ["pytest", "httpx"]
+web = ["fastapi", "uvicorn", "websockets"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+vrobot_web = ["static/*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
