@@ -1,0 +1,117 @@
+{
+  "version": 1,
+  "project": {
+    "owner": "venom-zen",
+    "title": "VirtualRobot",
+    "number": 2,
+    "url": "https://github.com/users/venom-zen/projects/2",
+    "visibility": "private"
+  },
+  "backlog": {
+    "path": "projects/virtual-robot/backlog.md",
+    "sha256": "5a2fc3ec135cff25a7584648d502f10ed5de1f4f349b93a43b70d01ddff11a1b",
+    "syncedAt": "2026-10-30T07:34:09.134Z"
+  },
+  "items": {
+    "WI-mutex-scheduling": {
+      "issue": 2,
+      "url": "https://github.com/venom-zen/vrobot-sim/issues/2",
+      "itemId": "PVTI_lAHOCjthhc4BpHYTzhELDAU",
+      "bodySha": "597b0fd5caf244704570ed972b7c2cb8abb00267587aed106a6e1ed793e08b56",
+      "backlogSha": "9acf5d21436567676b3952f39d9ceea141448ea89aa2c2431aebd00764f71f66",
+      "priority": "Now",
+      "status": "Done",
+      "syncedAt": "2026-10-30T07:34:09.134Z"
+    },
+    "WI-sim-kinematics": {
+      "issue": 1,
+      "url": "https://github.com/venom-zen/vrobot-sim/issues/1",
+      "itemId": "PVTI_lAHOCjthhc4BpHYTzhELC3k",
+      "bodySha": "332d771d4ccd1742747ad31cffaa2e7b21d0b6f640a7e8cd654d316f5ad80430",
+      "backlogSha": "1e0d31953b9384d3f74344a45e8a0fe8c69092457f7f100d205ef7f39e97a822",
+      "priority": "Now",
+      "status": "Done",
+      "syncedAt": "2026-10-30T07:34:09.134Z"
+    },
+    "WI-live-visualization": {
+      "issue": 3,
+      "url": "https://github.com/venom-zen/vrobot-sim/issues/3",
+      "itemId": "PVTI_lAHOCjthhc4BpHYTzhELDKI",
+      "bodySha": "d86521f118763e6a5643baa1d85c82c2772b158bd4b94f304666e91f63cf49e0",
+      "backlogSha": "cd8f7d7b7f7028e09bfe6c8fde60af24e688e485ff9b2d68a0e824eaba73216b",
+      "priority": "Now",
+      "status": "Done",
+      "syncedAt": "2026-10-30T07:34:09.134Z"
+    },
+    "WI-map-editor": {
+      "issue": 4,
+      "url": "https://github.com/venom-zen/vrobot-sim/issues/4",
+      "itemId": "PVTI_lAHOCjthhc4BpHYTzhELDTo",
+      "bodySha": "0c9015362951c9505edf2c7435e474c84047fdb5f16f68ae10b358dd8368b583",
+      "backlogSha": "bd275346de0dc9c95d2a5a1134abc94f9b372feccfd506970e91a029c388e377",
+      "priority": "Next",
+      "status": "Todo",
+      "syncedAt": "2026-10-30T07:34:09.134Z"
+    },
+    "WI-pluggable-dispatcher": {
+      "issue": 5,
+      "url": "https://github.com/venom-zen/vrobot-sim/issues/5",
+      "itemId": "PVTI_lAHOCjthhc4BpHYTzhELDeY",
+      "bodySha": "c244b62d11f83f6266ea330373febb9ae07ab485bc37cedcfcd0914a59544ced",
+      "backlogSha": "320b7a2c536c969845db4a7b0f110b3c97d9a8fc562a7ef80bc945dcb2c68c96",
+      "priority": "Next",
+      "status": "Todo",
+      "syncedAt": "2026-10-30T07:34:09.134Z"
+    },
+    "WI-scale-50-robots": {
+      "issue": 6,
+      "url": "https://github.com/venom-zen/vrobot-sim/issues/6",
+      "itemId": "PVTI_lAHOCjthhc4BpHYTzhELDlg",
+      "bodySha": "10cec2564dd97cb2cc442a2d86ed868d262e2cb48f0c397944768617aa9af061",
+      "backlogSha": "28b9f30b34e8f1df7df97707f4589ba5f85b63d9474c7e85424cf8ca500b67ce",
+      "priority": "Next",
+      "status": "Todo",
+      "syncedAt": "2026-10-30T07:34:09.134Z"
+    },
+    "WI-scripted-scenarios": {
+      "issue": 7,
+      "url": "https://github.com/venom-zen/vrobot-sim/issues/7",
+      "itemId": "PVTI_lAHOCjthhc4BpHYTzhELDto",
+      "bodySha": "03c1feec8a7717b11f7732526f7e5253b8d4809c22baddc1957465eb22ab67d9",
+      "backlogSha": "82ddc70111d7288348703b0c60ce7d0225b565b6192cb4c9aa44bbc880738471",
+      "priority": "Next",
+      "status": "Todo",
+      "syncedAt": "2026-10-30T07:34:09.134Z"
+    },
+    "WI-cloud-comm-sim": {
+      "issue": 8,
+      "url": "https://github.com/venom-zen/vrobot-sim/issues/8",
+      "itemId": "PVTI_lAHOCjthhc4BpHYTzhELD2U",
+      "bodySha": "5b1cb639ecc83cc535b079224b10b030f64ea92720b11254a5897cc4fff8a566",
+      "backlogSha": "93403d870e44434da8ee61d72919fcd64086746740cd38fddac4343d40b13ff5",
+      "priority": "Later",
+      "status": "Todo",
+      "syncedAt": "2026-10-30T07:34:09.134Z"
+    },
+    "WI-corner-case-injection": {
+      "issue": 9,
+      "url": "https://github.com/venom-zen/vrobot-sim/issues/9",
+      "itemId": "PVTI_lAHOCjthhc4BpHYTzhELD-A",
+      "bodySha": "3a2bf681cd35d52be656752320b1d0f323e6bc9799717020cd87610170df982a",
+      "backlogSha": "a74cc5eabe5a78523c2da7093b64cd247b30c37ff77a1ec8b1701e1357c15730",
+      "priority": "Later",
+      "status": "Todo",
+      "syncedAt": "2026-10-30T07:34:09.134Z"
+    },
+    "WI-robot-fault-states": {
+      "issue": 10,
+      "url": "https://github.com/venom-zen/vrobot-sim/issues/10",
+      "itemId": "PVTI_lAHOCjthhc4BpHYTzhELEGc",
+      "bodySha": "f5502fbad9a7526195b6ba48932f30150d4e2effb547acf3f6aeb78f029084d4",
+      "backlogSha": "b4d0fade5403abf3424097865fa62ad4438bc26d7f3d14e00cc2acc5846172c5",
+      "priority": "Later",
+      "status": "Todo",
+      "syncedAt": "2026-10-30T07:34:09.134Z"
+    }
+  }
+}

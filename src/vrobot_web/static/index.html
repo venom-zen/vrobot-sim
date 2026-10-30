@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VirtualRobot 实时可视化</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main id="layout">
+    <aside id="panel">
+      <header>
+        <h1>VirtualRobot 实时可视化</h1>
+        <div class="status-row">
+          <div id="connection" class="connection disconnected" title="状态流连接">
+            <span class="dot"></span>
+            <span id="connection-text">未连接</span>
+          </div>
+          <span class="mode">模式：<span id="mode-text">未配置</span></span>
+          <span id="map-id" class="map-id">demo</span>
+        </div>
+        <div id="run-readout" class="readout" aria-live="off"></div>
+      </header>
+
+      <section>
+        <div class="section-head">
+          <h2>场景配置</h2>
+          <button id="add-robot" type="button" class="ghost">添加机器人</button>
+        </div>
+        <div class="table-wrap">
+          <table id="robot-table" aria-label="机器人场景配置">
+            <thead>
+              <tr>
+                <th scope="col">机器人</th>
+                <th scope="col">起点</th>
+                <th scope="col">途经</th>
+                <th scope="col">终点</th>
+                <th scope="col"><span class="visually-hidden">操作</span></th>
+              </tr>
+            </thead>
+            <tbody id="robot-rows"></tbody>
+          </table>
+        </div>
+        <button id="apply-scene" type="button" class="primary">应用配置</button>
+      </section>
+
+      <section>
+        <h2>运行控制</h2>
+        <div class="controls">
+          <button id="button-start" type="button" class="primary" disabled>启动</button>
+          <button id="button-pause" type="button" disabled>暂停</button>
+          <button id="button-resume" type="button" disabled>继续</button>
+          <button id="button-reset" type="button" disabled>重置</button>
+        </div>
+        <label class="toggle" for="motion-toggle">
+          <input id="motion-toggle" type="checkbox" checked>
+          <span class="track" aria-hidden="true"><span class="thumb"></span></span>
+          <span class="toggle-text">动效</span>
+          <span class="toggle-hint">轨迹与状态脉冲</span>
+        </label>
+      </section>
+
+      <section>
+        <h2>图例</h2>
+        <ul id="status-legend" class="legend"></ul>
+      </section>
+
+      <section>
+        <h2>错误</h2>
+        <ul id="error-list" class="errors"></ul>
+      </section>
+    </aside>
+
+    <section id="stage">
+      <canvas id="canvas" role="img" aria-label="虚拟 AMR 实时场景"></canvas>
+    </section>
+  </main>
+  <script src="/app.js"></script>
+</body>
+</html>

@@ -12,18 +12,18 @@ candidate -> ready-for-clarifying -> design-ready -> planned -> executing -> don
 
 ## Current Focus
 
-- `WI-mutex-scheduling` — `WI-sim-kinematics` 已交付，地图数据模型与机器人状态集合已确定；
-  下一步由项目发起人对它运行 `clarifying`，确定路权申请、占用与释放的流转规则。
-- `WI-live-visualization` 保持 `candidate`，等 `WI-mutex-scheduling` 确定临界区占用与等待路权状态后再进入
-  `clarifying`，避免重复决策状态集合。
+- MVP 的三个 Now work item 均已交付（`done`）：`WI-sim-kinematics`、`WI-mutex-scheduling`、
+  `WI-live-visualization`。
+- 下一项尚未选定：`WI-map-editor`、`WI-pluggable-dispatcher`、`WI-scale-50-robots`、
+  `WI-scripted-scenarios` 都是 `candidate`，进入 `clarifying` 前需要用户确定优先级与先后顺序。
 
 ## Work Items
 
 | ID | Outcome | Priority | Status | Dependencies |
 |----|---------|----------|--------|--------------|
 | `WI-sim-kinematics` | 工程师能让单台虚拟 AMR 按运动学约束在拓扑图上行驶并正确响应碰撞 | Now | done | None |
-| `WI-mutex-scheduling` | 工程师能构造并观察多车临界区互斥与死锁场景 | Now | ready-for-clarifying | `WI-sim-kinematics` |
-| `WI-live-visualization` | 工程师能在浏览器里实时看到机器人位姿、状态与临界区占用 | Now | candidate | `WI-sim-kinematics`, `WI-mutex-scheduling` |
+| `WI-mutex-scheduling` | 工程师能构造并观察多车临界区互斥与死锁场景 | Now | done | `WI-sim-kinematics` |
+| `WI-live-visualization` | 工程师能在浏览器里实时看到机器人位姿、状态与临界区占用 | Now | done | `WI-sim-kinematics`, `WI-mutex-scheduling` |
 | `WI-map-editor` | 工程师能在浏览器里编辑地图而不改代码 | Next | candidate | `WI-sim-kinematics` |
 | `WI-pluggable-dispatcher` | 工程师能用外部调度器替换内置调度跑同一场景 | Next | candidate | `WI-sim-kinematics`, `WI-mutex-scheduling` |
 | `WI-scale-50-robots` | 50 台并发仿真能达到可接受帧率与实时倍速 | Next | candidate | `WI-mutex-scheduling`, `WI-live-visualization` |
@@ -53,7 +53,7 @@ candidate -> ready-for-clarifying -> design-ready -> planned -> executing -> don
 - **Spec**: `specs/sim-kinematics/design.md`
 - **Status evidence**: 交付链路完成：design review R6 为 `Go`（F-023 已修复）、`tasks.md` 30 项 checkbox 全部完成、
   `exec-evidence.md` 记录 126 项测试通过、`code-review.md` 为 `Pass / Go`（8 条 findings 全部 resolved）。
-- **External ref**: https://github.com/venom-zen/vrobot-sim/issues/1
+- **External ref**: [Issue #1](https://github.com/venom-zen/vrobot-sim/issues/1)。
 
 #### Open Questions
 
@@ -76,14 +76,15 @@ candidate -> ready-for-clarifying -> design-ready -> planned -> executing -> don
   其余处于等待路权状态，没有机器人重叠穿行；示例地图上能构造出一个多车互相等待无法推进的死锁场景。
   证据来源为仿真状态输出。
 - **Priority**: Now
-- **Status**: ready-for-clarifying
+- **Status**: done
 - **Dependencies**: `WI-sim-kinematics`（消费其位姿输出、状态机与地图互斥组属性）
-- **Readiness**: 依赖已满足：`WI-sim-kinematics` 已交付，地图数据模型（含 `MapCriticalZone` 与互斥组属性）
-  与机器人状态枚举已确定。等待项目发起人运行 `clarifying`。
-- **Spec**: Not created
-- **Status evidence**: 通过 STEP 6 准入关卡：依赖项已交付（code review `Pass / Go`），Outcome、Priority、
-  Success signal 与边界均已确认，无阻塞澄清的项目级未决决策。
-- **External ref**: https://github.com/venom-zen/vrobot-sim/issues/2
+- **Readiness**: 依赖已满足；设计与任务计划已完成，交付状态见 Status evidence。
+- **Spec**: `specs/mutex-scheduling/design.md`
+- **Status evidence**: 交付链路完成：`review.md` R3 Closure Review 为 `Pass / Go`（0 Blocker / 0 Major /
+  0 Minor；F-001、F-006、F-008、F-009 resolved，F-002～F-005 closed）；`tasks.md` 30 项 checkbox
+  全部完成；`exec-evidence.md` 记录 166 项测试通过；`code-review.md` 经 Full Review 与
+  Closure Review（round 1）为 `Pass / Go`，4 条 minor 全部 resolved，复核后 168 项测试通过。
+- **External ref**: [Issue #2](https://github.com/venom-zen/vrobot-sim/issues/2)。
 
 #### Open Questions
 
@@ -103,12 +104,15 @@ candidate -> ready-for-clarifying -> design-ready -> planned -> executing -> don
 - **Success signal**: 浏览器中能看到 5-10 台机器人按仿真进度移动，状态机流转与临界区占用可见，
   画面无明显卡顿，手动启动与暂停能正确控制仿真推进。证据来源为浏览器人工观察。
 - **Priority**: Now
-- **Status**: candidate
+- **Status**: done
 - **Dependencies**: `WI-sim-kinematics`（位姿与状态数据来源）、`WI-mutex-scheduling`（临界区占用与等待路权状态）
-- **Readiness**: Outcome 与边界已确认。等待前两项确定状态集合与数据契约后进入澄清。
-- **Spec**: Not created
-- **Status evidence**: None
-- **External ref**: https://github.com/venom-zen/vrobot-sim/issues/3
+- **Readiness**: 依赖已满足；设计与任务计划已完成，交付状态见 Status evidence。
+- **Spec**: `specs/live-visualization/design.md`
+- **Status evidence**: 交付链路完成：`review.md` R2 Closure Review 为 `Pass / Go`（0 Blocker / 0 Major /
+  0 Minor）；`tasks.md` 32 项 checkbox 全部完成；`exec-evidence.md` 记录 217 项测试通过
+  （168 内核 + 49 Web）与浏览器人工验收；`code-review.md` 经 Full Review 与 Closure Review（round 1）为
+  `Pass / Go`，4 条 minor 全部 resolved；交付提交 `e3ae75f`。
+- **External ref**: [Issue #3](https://github.com/venom-zen/vrobot-sim/issues/3)。
 
 #### Open Questions
 
@@ -132,7 +136,7 @@ candidate -> ready-for-clarifying -> design-ready -> planned -> executing -> don
 - **Readiness**: Outcome 与边界已确认。等待 MVP 验证通过，且需要先确认现有调度系统的地图格式是否需要兼容。
 - **Spec**: Not created
 - **Status evidence**: None
-- **External ref**: https://github.com/venom-zen/vrobot-sim/issues/4
+- **External ref**: [Issue #4](https://github.com/venom-zen/vrobot-sim/issues/4)。
 
 #### Open Questions
 
@@ -155,7 +159,7 @@ candidate -> ready-for-clarifying -> design-ready -> planned -> executing -> don
 - **Readiness**: Outcome 与边界已确认。等待 MVP 验证通过，且需要现有调度系统的指令接口样例。
 - **Spec**: Not created
 - **Status evidence**: None
-- **External ref**: https://github.com/venom-zen/vrobot-sim/issues/5
+- **External ref**: [Issue #5](https://github.com/venom-zen/vrobot-sim/issues/5)。
 
 #### Open Questions
 
@@ -179,7 +183,7 @@ candidate -> ready-for-clarifying -> design-ready -> planned -> executing -> don
   该结果决定并发架构方向。
 - **Spec**: Not created
 - **Status evidence**: None
-- **External ref**: https://github.com/venom-zen/vrobot-sim/issues/6
+- **External ref**: [Issue #6](https://github.com/venom-zen/vrobot-sim/issues/6)。
 
 #### Open Questions
 
@@ -203,7 +207,7 @@ candidate -> ready-for-clarifying -> design-ready -> planned -> executing -> don
   若死锁场景难以通过实时动画定位，可提前启动。
 - **Spec**: Not created
 - **Status evidence**: None
-- **External ref**: https://github.com/venom-zen/vrobot-sim/issues/7
+- **External ref**: [Issue #7](https://github.com/venom-zen/vrobot-sim/issues/7)。
 
 #### Open Questions
 
@@ -226,7 +230,7 @@ candidate -> ready-for-clarifying -> design-ready -> planned -> executing -> don
 - **Readiness**: 用户已确认第一版不做通信层（见 PDR-comm-layer-deferred）。保留方向，暂不澄清技术细节。
 - **Spec**: Not created
 - **Status evidence**: None
-- **External ref**: https://github.com/venom-zen/vrobot-sim/issues/8
+- **External ref**: [Issue #8](https://github.com/venom-zen/vrobot-sim/issues/8)。
 
 #### Open Questions
 
@@ -247,7 +251,7 @@ candidate -> ready-for-clarifying -> design-ready -> planned -> executing -> don
 - **Readiness**: 保留方向，暂不澄清技术细节。
 - **Spec**: Not created
 - **Status evidence**: None
-- **External ref**: https://github.com/venom-zen/vrobot-sim/issues/9
+- **External ref**: [Issue #9](https://github.com/venom-zen/vrobot-sim/issues/9)。
 
 #### Open Questions
 
@@ -268,7 +272,7 @@ candidate -> ready-for-clarifying -> design-ready -> planned -> executing -> don
 - **Readiness**: 用户已确认异常态与故障注入不进入 MVP。保留方向，暂不澄清技术细节。
 - **Spec**: Not created
 - **Status evidence**: None
-- **External ref**: https://github.com/venom-zen/vrobot-sim/issues/10
+- **External ref**: [Issue #10](https://github.com/venom-zen/vrobot-sim/issues/10)。
 
 #### Open Questions
 

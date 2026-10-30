@@ -233,3 +233,27 @@ def test_a_preset_obstacle_scenario_never_reports_overlap_at_the_dt_ceiling():
     assert reasons == {EStopReason.SAFETY_DISTANCE}, "the fallback branch must not be reached"
     assert robot.pose.x < 5.0
     assert math.hypot(robot.pose.x - 5.0, robot.pose.y) >= BODY_RADIUS_M + OBSTACLE_RADIUS_M
+
+
+def test_a_peer_circle_ahead_inside_the_window_triggers_like_an_obstacle():
+    peer = _obstacle(1.0, 0.0, radius_m=BODY_RADIUS_M)
+    assert SafetyMonitor().check(_robot(), (), _segment(), DT_S, peers=(peer,)) is EStopReason.SAFETY_DISTANCE
+
+
+def test_a_lateral_peer_outside_the_clearance_is_skipped():
+    peer = _obstacle(1.0, 2.0 * BODY_RADIUS_M + 0.01, radius_m=BODY_RADIUS_M)
+    assert SafetyMonitor().check(_robot(), (), _segment(), DT_S, peers=(peer,)) is EStopReason.NONE
+
+
+def test_a_peer_circle_overlap_is_reported_even_when_lateral():
+    peer = _obstacle(0.3, BODY_RADIUS_M, radius_m=BODY_RADIUS_M)
+    assert SafetyMonitor().check(_robot(), (), _segment(), DT_S, peers=(peer,)) is EStopReason.OVERLAP
+
+
+def test_peers_and_registered_obstacles_share_one_judgement():
+    peer = _obstacle(8.0, 0.0, radius_m=BODY_RADIUS_M)
+    obstacle = _obstacle(1.0, 0.0)
+    assert (
+        SafetyMonitor().check(_robot(), (obstacle,), _segment(), DT_S, peers=(peer,))
+        is EStopReason.SAFETY_DISTANCE
+    )

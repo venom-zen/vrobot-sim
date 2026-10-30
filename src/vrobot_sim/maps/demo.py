@@ -1,4 +1,4 @@
-"""Demo map: triangular ring with critical zones, branch and turn chain."""
+"""Demo map: triangular ring with critical zones, branch, turn chain and outer loop."""
 
 from __future__ import annotations
 
@@ -16,6 +16,8 @@ from vrobot_sim.map_model import (
 
 DEMO_MAP_ID: Final = "demo"
 
+# Ten startable nodes with pairwise center distances above 0.70 m, so ten robots with
+# 0.35 m body radius can start on distinct nodes without touching at t=0.
 _DEMO_NODES = (
     MapNode("N01", 0.0, 0.0),
     MapNode("N02", 20.0, 0.0),
@@ -24,10 +26,13 @@ _DEMO_NODES = (
     MapNode("N05", 20.0, 16.0),
     MapNode("N06", 16.0, 16.0),
     MapNode("N07", 16.0, 20.0),
+    MapNode("N08", 0.0, 15.0),
+    MapNode("N09", 10.0, 25.0),
+    MapNode("N10", 0.0, 25.0),
 )
 
 # E01 carries the non-default placeholder attributes; E02 is the one-way edge that
-# makes the ring dependency directed.
+# makes the ring dependency directed. E08-E11 form the outer loop and stay unzoned.
 _DEMO_EDGES = (
     MapEdge(
         "E01",
@@ -45,6 +50,10 @@ _DEMO_EDGES = (
     MapEdge("E05", "N04", "N05", EdgeDirection.BOTH),
     MapEdge("E06", "N05", "N06", EdgeDirection.BOTH),
     MapEdge("E07", "N06", "N07", EdgeDirection.BOTH),
+    MapEdge("E08", "N01", "N08", EdgeDirection.BOTH),
+    MapEdge("E09", "N08", "N10", EdgeDirection.BOTH),
+    MapEdge("E10", "N10", "N09", EdgeDirection.BOTH),
+    MapEdge("E11", "N09", "N07", EdgeDirection.BOTH),
 )
 
 # The three ring edges sit in mutually exclusive zones, which is the shape
