@@ -23,6 +23,7 @@ class MapEdgePayload(BaseModel):
     from_node_id: str
     to_node_id: str
     direction: str
+    lane_width_m: float
 
 
 class MapZonePayload(BaseModel):
@@ -52,6 +53,7 @@ class MapPayload(BaseModel):
                     from_node_id=edge.from_node_id,
                     to_node_id=edge.to_node_id,
                     direction=edge.direction.value,
+                    lane_width_m=edge.lane_width_m,
                 )
                 for edge in topology.edges
             ],
