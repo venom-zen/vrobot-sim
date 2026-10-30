@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VirtualRobot 实时可视化</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main id="layout">
+    <aside id="panel">
+      <header>
+        <h1>VirtualRobot 实时可视化</h1>
+        <div id="connection" class="connection disconnected">
+          <span class="dot"></span>
+          <span id="connection-text">未连接</span>
+        </div>
+        <div id="mode" class="mode">模式：<span id="mode-text">未配置</span></div>
+      </header>
+
+      <section>
+        <div class="section-head">
+          <h2>场景配置</h2>
+          <button id="add-robot" type="button" class="ghost">添加机器人</button>
+        </div>
+        <div class="table-wrap">
+          <table id="robot-table">
+            <thead>
+              <tr>
+                <th>机器人</th>
+                <th>起点</th>
+                <th>途经</th>
+                <th>终点</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="robot-rows"></tbody>
+          </table>
+        </div>
+        <button id="apply-scene" type="button" class="primary">应用配置</button>
+      </section>
+
+      <section>
+        <h2>运行控制</h2>
+        <div class="controls">
+          <button id="button-start" type="button" disabled>启动</button>
+          <button id="button-pause" type="button" disabled>暂停</button>
+          <button id="button-resume" type="button" disabled>继续</button>
+          <button id="button-reset" type="button" disabled>重置</button>
+        </div>
+      </section>
+
+      <section>
+        <h2>错误</h2>
+        <ul id="error-list" class="errors"></ul>
+      </section>
+    </aside>
+
+    <section id="stage">
+      <canvas id="canvas"></canvas>
+    </section>
+  </main>
+  <script src="/app.js"></script>
+</body>
+</html>
